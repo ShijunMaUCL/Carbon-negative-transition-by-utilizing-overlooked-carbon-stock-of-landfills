@@ -1223,3 +1223,31 @@ colnames(newdata2) <- c("Cumulative organic carbon stock","Cumulative soil-like 
                         "Cumulative textile carbon stock","Cumulative wood carbon stock")
 landfillminingandecoremediationscenariocarbonstock = rbind(newdata1,newdata2)
 mydata=read.csv('C:/Users/13094/Desktop/Nature Cities/landfill mining and eco-remediation scenario.csv',sep=",",header=TRUE)
+Sanitarylandfillmethaneemissions = Finalresult2$`Carbon of landfill gas in sanitary landfills`*(1-mydata$Methane.collection.rate.of.Sanitayr.landfills..../100)*0.5/12*16*27.9
+Dumpmethaneemissions = Finalresult2$`Carbon of landfill gas in dumps`*0.5/12*16*27.9
+
+mydata1=read.csv("C:/Users/13094/Desktop/Nature Cities/file/landfill mining and eco-remediation scenario carbon emisssion21.csv",sep=",",header=TRUE)
+newdata3 = c(mydata1[,2])
+for (m in 22:30) {
+  mydata1=read.csv(paste("C:/Users/13094/Desktop/Nature Cities/file/", "landfill mining and eco-remediation scenario carbon emisssion", m, ".csv", sep = ""),sep=",",header=TRUE)
+  newdata3 = cbind(newdata3,mydata1[,2])
+}
+aaa = c(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0)
+bbb=aaa*0.5+1*(1-aaa)
+newdata3 = t(newdata3)
+sum(newdata3[,5])
+mydata=read.csv('C:/Users/13094/Desktop/Nature Cities/landfill mining and eco-remediation scenario.csv',sep=",",header=TRUE)
+Sanitarylandfillmethaneemissionsfinal = c(Sanitarylandfillmethaneemissions[1:20],newdata3[,1]*(1-mydata$Methane.collection.rate.of.Sanitayr.landfills....[21:30]/100)*bbb)
+dumpmethaneemissionsfinal = c(Dumpmethaneemissions[1:20],newdata3[,2])
+ccc = rep(0,20)
+relativecarbonemissionofincreasedincinerationlandfillminingfinal = c(ccc,newdata3[,3])
+relativecarbonemissionofincreasedcompostlandfillminingfinal = c(ccc,newdata3[,4])
+carbonemissionsfinal = data.frame(Sanitarylandfillmethaneemissionsfinal,dumpmethaneemissionsfinal,relativecarbonemissionofincreasedincinerationlandfillminingfinal,
+                                  relativecarbonemissionofincreasedcompostlandfillminingfinal,Finalresult2$`relative carbon emission of increased incineration`,
+                                  Finalresult2$`relative carbon emission of increased compost`)
+Final = data.frame(landfillminingandecoremediationscenariocarbonstock,carbonemissionsfinal)
+colnames(Final) <- c("Cumulative organic carbon stock","Cumulative soil-like material carbon stock","Cumulative plastic carbon stock",
+                     "Cumulative textile carbon stock","Cumulative wood carbon stock","Sanitary landfill methane emissions","dump methane emissions",
+                     "relative carbon emission of increased incineration landfill mining","relative carbonvemission of increased compost landfill mining",
+                     "relative carbon emission of increased incineration","relative carbon emission of increased compost")
+write.csv(Final,"C:/Users/13094/Desktop/Nature Cities/file/landfillminingandeco-remediationscenarioresult.csv")
